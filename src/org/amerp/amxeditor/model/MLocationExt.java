@@ -203,7 +203,6 @@ public class MLocationExt extends MLocation implements DocAction
 	 */
 	public void setC_Country_ID (int C_Country_ID)
 	{
-log.warning("------- setC_Country_ID:"+C_Country_ID);
 		if (C_Country_ID >= 0)
 			setCountry (MCountryExt.get(getCtx(), C_Country_ID));
 	}	//	setCountry
@@ -296,7 +295,6 @@ log.warning("------- setC_Country_ID:"+C_Country_ID);
 	public void setC_Region_ID (int C_Region_ID)
 	{
 		if (C_Region_ID >=0 ) {
-log.warning("------- setC_Region_ID:"+C_Region_ID);
 			setRegion (MRegionExt.get(getCtx(), C_Region_ID));
 		}
 	}	//	setC_Region_ID
@@ -353,7 +351,6 @@ log.warning("------- setC_Region_ID:"+C_Region_ID);
 	 * @param C_Municipality_ID
 	 */
 	public void setC_Municipality_ID(int C_Municipality_ID) {
-log.warning("------- setC_Municipality_ID:"+C_Municipality_ID);
 		if (C_Municipality_ID < 1) 
 			set_Value (COLUMNNAME_C_Municipality_ID, null);
 		else 
@@ -388,7 +385,6 @@ log.warning("------- setC_Municipality_ID:"+C_Municipality_ID);
 	 *  @param C_Parish_ID
 	 */
 	public void setC_Parish_ID(int C_Parish_ID) {
-log.warning("------- setC_Parish_ID:"+C_Parish_ID);
 		if (C_Parish_ID < 1) 
 			set_Value (COLUMNNAME_C_Parish_ID, null);
 		else 

@@ -821,7 +821,6 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			}
 			else
 			{
-log.warning("-----------Error--------------");
 				onSaveError = true;
 				FDialog.error(0, this, "CityNotFound", (String)null, new Callback<Integer>() {					
 					@Override
@@ -1113,13 +1112,13 @@ log.warning("-----------Error--------------");
 		} else {
 			m_location.setParish(null);
 		}
-log.warning("................Values Selected................................");
-log.warning("City Selected:"+txtCity.getC_City_ID()+"-"+txtCity.getValue()+"  Country Selected:"+lstCountry.getSelectedItem().getValue()+"  Region Selected:"+lstRegion.getSelectedItem().getValue()+"  Municipality Selected:"+lstMunicipality.getSelectedItem().getValue()+"  Parish Selected:"+lstParish.getSelectedItem().getValue());
-log.warning("................Values Updated................................");
-log.warning("add1:"+m_location.getAddress1()+" add2:"+m_location.getAddress2()+"  add3:"+m_location.getAddress3()+"  add4:"+m_location.getAddress4()+" city:"+m_location.getCity()+"  cityid:"+m_location.getC_City_ID()+" Region:"+m_location.getC_Region_ID());
-log.warning("Mun:"+m_location.getC_Municipality_ID()+"  Parr:"+m_location.getC_Parish_ID());
-log.warning("................FullAdress................................");
-log.warning("getFullAdress:"+getFullAdress());
+		//log.warning("................Values Selected................................");
+		//log.warning("City Selected:"+txtCity.getC_City_ID()+"-"+txtCity.getValue()+"  Country Selected:"+lstCountry.getSelectedItem().getValue()+"  Region Selected:"+lstRegion.getSelectedItem().getValue()+"  Municipality Selected:"+lstMunicipality.getSelectedItem().getValue()+"  Parish Selected:"+lstParish.getSelectedItem().getValue());
+		//log.warning("................Values Updated................................");
+		//log.warning("add1:"+m_location.getAddress1()+" add2:"+m_location.getAddress2()+"  add3:"+m_location.getAddress3()+"  add4:"+m_location.getAddress4()+" city:"+m_location.getCity()+"  cityid:"+m_location.getC_City_ID()+" Region:"+m_location.getC_Region_ID());
+		//log.warning("Mun:"+m_location.getC_Municipality_ID()+"  Parr:"+m_location.getC_Parish_ID());
+		//log.warning("................FullAdress................................");
+		//log.warning("getFullAdress:"+getFullAdress());
 		//  Save changes 
 		boolean success = false;
 		if (m_location.save())
