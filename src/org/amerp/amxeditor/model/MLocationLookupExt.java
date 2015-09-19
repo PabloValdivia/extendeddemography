@@ -161,4 +161,9 @@ public final class MLocationLookupExt extends Lookup
 		return null;
 	}   //  getArray
 
+	public boolean containsKeyNoDirect(Object key) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }	//	MLocationExt

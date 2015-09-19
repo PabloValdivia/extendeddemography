@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Amxeditor
 Bundle-SymbolicName: org.amerp.amxeditor
 Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/ModelFactory.xml,OSGI-INF/EditorFactory.xml,OSGI-INF/DisplayTypeFactory.xml,
  OSGI-INF/EventFactory.xml
 Require-Bundle: org.adempiere.base;bundle-version="2.0.0",

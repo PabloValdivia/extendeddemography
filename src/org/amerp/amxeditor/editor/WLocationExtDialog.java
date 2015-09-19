@@ -562,8 +562,12 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		// actualiza cuando cambia la region	
 		if (m_location.getC_Region_ID() != s_oldRegion_ID)
 		{	
+			// Clear municipality
 			lstMunicipality.getChildren().clear();
 			lstMunicipality.appendItem("", null); 
+			// Clear parish
+			lstParish.getChildren().clear();
+			lstParish.appendItem("", null); 
 			for (MMunicipality municipality : MMunicipality.getMunicipalitys(Env.getCtx(), m_location.getC_Region_ID()))
 			{
 				lstMunicipality.appendItem(municipality.getName(),municipality);			
@@ -1099,14 +1103,16 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		//log.warning("...............Country Selected:"+lstCountry.getSelectedItem().getValue());
 		//log.warning("...............Region Selected:"+lstRegion.getSelectedItem().getValue());
 		//log.warning("...............Municipality Selected:"+lstMunicipality.getSelectedItem().getValue());
-		if ( !lstMunicipality.getSelectedItem().getValue().equals(null) ) {
+		if (lstRegion.getSelectedItem()!=null  ) {  
+			//!lstMunicipality.getSelectedItem().getValue().equals(null) ) {
 			MMunicipality m=(MMunicipality)lstMunicipality.getSelectedItem().getValue();
 			m_location.setMunicipality(m);
 		} else {
 			m_location.setMunicipality(null);
 		}
 		// Parish
-		if (!lstParish.getSelectedItem().getValue().equals(null) ) {
+		if (lstParish.getSelectedItem().getValue() !=null ) {
+			//!lstParish.getSelectedItem().getValue().equals(null) ) {
 			MParish p=(MParish)lstParish.getSelectedItem().getValue();
 			m_location.setParish(p);
 		} else {
