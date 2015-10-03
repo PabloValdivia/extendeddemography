@@ -1,6 +1,15 @@
-/**
- * 
- */
+/******************************************************************************
+ * Copyright (C) 2015 Luis Amesty                                             *
+ * Copyright (C) 2015 AMERP Consulting                                        *
+ * This program is free software; you can redistribute it and/or modify it    *
+ * under the terms version 2 of the GNU General Public License as published   *
+ * by the Free Software Foundation. This program is distributed in the hope   *
+ * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied *
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.           *
+ * See the GNU General Public License for more details.                       *
+ * You should have received a copy of the GNU General Public License along    *
+ * with this program; if not, write to the Free Software Foundation, Inc.,    *
+ ******************************************************************************/
 package org.amerp.amxeditor.editor;
 
 import java.util.*;
@@ -24,9 +33,7 @@ import org.adempiere.webui.component.Window;
 import org.adempiere.webui.window.*;
 //
 import org.amerp.amxeditor.model.*;
-import org.compiere.model.GridField;
-import org.compiere.model.MSysConfig;
-import org.compiere.model.MOrgInfo;
+import org.compiere.model.*;
 //
 import org.compiere.util.*;
 import org.zkoss.zk.ui.Executions;
@@ -83,7 +90,6 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 	private boolean     m_change = false;
 	private MLocationExt   m_location;
 	private int         m_origCountry_ID;
-	//
 	private int         m_origRegion_ID;
 	private int         m_origMunicipality_ID;
 	private int         m_selectedRegion_ID;
@@ -91,6 +97,7 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 	private int         s_oldCountry_ID = 0;
 	private int         s_oldRegion_ID = 0;
 	private int         s_oldMunicipality_ID = 0;
+	private int         s_oldParish_ID = 0;
 	
 	private int m_WindowNo = 0;
 
@@ -153,10 +160,11 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		lstCountry.addEventListener(Events.ON_SELECT,this);
 		lstRegion.addEventListener(Events.ON_SELECT,this);
 		lstMunicipality.addEventListener(Events.ON_SELECT,this);
+		//lstParish.addEventListener(Events.ON_SELECT,this);
 		m_origCountry_ID = m_location.getC_Country_ID();
 		//  Current Region
 		lstRegion.appendItem("", null);
-		for (MRegionExt region : MRegionExt.getRegions(Env.getCtx(), m_origCountry_ID))
+		for (MRegion region : MRegion.getRegions(Env.getCtx(), m_origCountry_ID))
 		{
 			lstRegion.appendItem(region.getName(),region);
 		}
@@ -167,7 +175,6 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			else
 				lblRegion.setValue(Msg.getMsg(Env.getCtx(), "Region"));
 		}
-
 		setRegion();
 		// Municipality
 		m_origRegion_ID = m_location.getC_Region_ID();
@@ -178,23 +185,23 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		{
 			lstMunicipality.appendItem(municipality.getName(),municipality);
 		}
-	
 		setMunicipality();
 		// Parish
 		m_origMunicipality_ID =  m_location.getC_Municipality_ID();
 		m_selectedMunicipality_ID = m_origMunicipality_ID;	// lstMunicipality.getSelectedCount();	
-	
+		//
 		lstParish.appendItem("", null); 
 		for (MParish parish : MParish.getParishs(Env.getCtx(), m_selectedMunicipality_ID,m_selectedRegion_ID))
 		{
 			lstParish.appendItem(parish.getName(),parish);
 		}
 		setParish();
+		// initLocation First Time
 		initLocation();
 		//               
 		this.setWidth("350px");
 //		this.setHeight("360px"); // required fixed height for ZK to auto adjust the position based on available space
-		this.setHeight("400px"); // required fixed height for ZK to auto adjust the position based on available space
+		this.setHeight("420px"); // required fixed height for ZK to auto adjust the position based on available space
 		this.setSclass("popup-dialog");
 		this.setClosable(true);
 		this.setBorder("normal");
@@ -497,6 +504,7 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		
 		addEventListener("onSaveError", this);
 	}
+	
 	/**
 	 * Dynamically add fields to the Location dialog box
 	 * @param panel panel to add
@@ -523,6 +531,9 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		MCountryExt country =  m_location.getCountryExt();
 		if (log.isLoggable(Level.FINE)) log.fine(country.getName() + ", Region=" + country.isHasRegion() + " " + country.getCaptureSequence()
 				+ ", C_Location_ID=" + m_location.getC_Location_ID());
+//		log.warning("m_location.initLocation Init Values..City:"+m_location.getC_City_ID()+"-"+m_location.getCity()+
+//						"..Country:"+m_location.getC_Country_ID()+"..Region:"+m_location.getC_Region_ID()+
+//						"..Municipality:"+m_location.getC_Municipality_ID()+"..Parish:"+m_location.getC_Parish_ID());
 		//  new Country
 		if (m_location.getC_Country_ID() != s_oldCountry_ID)
 		{
@@ -555,24 +566,27 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		} else {
 			Env.setContext(Env.getCtx(), m_WindowNo, Env.TAB_INFO, "C_Region_ID", "0");
 		}
+		// log.warning("....C_Country_ID"+String.valueOf(country.get_ID()));
 		Env.setContext(Env.getCtx(), m_WindowNo, Env.TAB_INFO, "C_Country_ID", String.valueOf(country.get_ID()));
+		
 		// City Filllist
 		txtCity.fillList();
-		
+
 		// actualiza cuando cambia la region	
 		if (m_location.getC_Region_ID() != s_oldRegion_ID)
 		{	
-			// Clear municipality
 			lstMunicipality.getChildren().clear();
-			lstMunicipality.appendItem("", null); 
-			// Clear parish
+			lstMunicipality.appendItem("", null);
+			
 			lstParish.getChildren().clear();
-			lstParish.appendItem("", null); 
+			lstParish.appendItem("", null);
 			for (MMunicipality municipality : MMunicipality.getMunicipalitys(Env.getCtx(), m_location.getC_Region_ID()))
 			{
 				lstMunicipality.appendItem(municipality.getName(),municipality);			
 			}
+			//setMunicipality();
 			//m_origMunicipality_ID =  m_location.getC_Municipality_ID();
+//			log.warning("getC_Municipality_ID()"+m_location.getC_Municipality_ID());		
 			if(m_location.getC_Municipality_ID()>0){
 				setMunicipality();
 			} else {
@@ -581,10 +595,13 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			}
 			s_oldRegion_ID = m_location.getC_Region_ID();
 		}
+
+		//  new Municipality
 		// actualiza cuando cambia el municipio
 		if (m_location.getC_Municipality_ID() != s_oldMunicipality_ID)
 		{
-			//MMunicipality municipality =m_location.getMunicipality();
+			// Clear Parish
+//			setParish();
 			lstParish.getChildren().clear();
 			lstParish.appendItem("", null); 
 			for (MParish parish : MParish.getParishs(Env.getCtx(),  m_location.getC_Municipality_ID(),m_location.getC_Region_ID()))
@@ -594,6 +611,11 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			setParish();
 			s_oldMunicipality_ID = m_location.getC_Municipality_ID();
 		}
+		//  new Parish
+		
+//		log.warning("m_location.initLocation OJO..City:"+m_location.getC_City_ID()+"-"+m_location.getCity()+
+//						"..Country:"+m_location.getC_Country_ID()+"..Region:"+m_location.getC_Region_ID()+
+//						"..Municipality:"+m_location.getC_Municipality_ID()+"..Parish:"+m_location.getC_Parish_ID());
 		//      sequence of City Postal Region - @P@ @C@ - @C@, @R@ @P@
 		String ds = country.getCaptureSequence();
 		if (ds == null || ds.length() == 0)
@@ -682,6 +704,9 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			}
 			setCountry();
 		}
+//log.warning("m_location.initLocation  END..City:"+m_location.getC_City_ID()+"-"+m_location.getCity()+
+//				"..Country:"+m_location.getC_Country_ID()+"..Region:"+m_location.getC_Region_ID()+
+//				"..Municipality:"+m_location.getC_Municipality_ID()+"..Parish:"+m_location.getC_Parish_ID());
 	}
 	
 	/**
@@ -730,10 +755,10 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 	 */
 	private void setMunicipality()
 	{
-		if (m_location.getMunicipality() != null) 
+		if (m_location.getMunicipality() != null ) 
 		{
-			List<?> listState = lstMunicipality.getChildren();
-			Iterator<?> iter = listState.iterator();
+			List<?> listMun = lstMunicipality.getChildren();
+			Iterator<?> iter = listMun.iterator();
 			while (iter.hasNext())
 			{
 				ListItem listitem = (ListItem)iter.next();
@@ -755,8 +780,8 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 	{
 		if (m_location.getParish() != null) 
 		{
-			List<?> listState = lstParish.getChildren();
-			Iterator<?> iter = listState.iterator();
+			List<?> listParr = lstParish.getChildren();
+			Iterator<?> iter = listParr.iterator();
 			while (iter.hasNext())
 			{
 				ListItem listitem = (ListItem)iter.next();
@@ -886,7 +911,7 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 					setRegion();
 				}
 			}
-			
+			// VALIDATION MESSAGE USING FDialog Class
 			String msg = validate_OK();
 			if (msg != null) {
 				onSaveError = true;
@@ -1023,7 +1048,6 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		}
 	}
 
-	
 	// LCO - address 1, region and city required
 	private String validate_OK() {
 		String fields = "";
@@ -1040,16 +1064,16 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			fields = fields + " " + "@Address4@, ";
 		}
 		if (isCityMandatory && txtCity.getValue().trim().length() == 0) {
-			fields = fields + " " + "@C_City_ID@, ";
+			fields = fields + " " + "@City@, ";
 		}
 		if (isParishMandatory && lstParish.getName().trim().length() == 0) {
-			fields = fields + " " + "@C_Parish_ID@, ";
+			fields = fields + " " + "@Parish@, ";
 		}
 		if (isMunicipalityMandatory && lstMunicipality.getName().trim().length() == 0) {
-			fields = fields + " " + "@C_Municipality_ID@, ";
+			fields = fields + " " + "@Municipality@, ";
 		}
 		if (isRegionMandatory && lstRegion.getSelectedItem() == null) {
-			fields = fields + " " + "@C_Region_ID@, ";
+			fields = fields + " " + "@Region@, ";
 		}
 		if (isPostalMandatory && txtPostal.getText().trim().length() == 0) {
 			fields = fields + " " + "@Postal@, ";
@@ -1079,12 +1103,23 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		m_location.setCity(txtCity.getValue());
 		m_location.setPostal(txtPostal.getValue());
 		m_location.setPostal_Add(txtPostalAdd.getValue());
-		
+		//
+//log.warning("m_location.action_OK  Values..City:"+m_location.getC_City_ID()+"-"+m_location.getCity()+
+//		"..Country:"+m_location.getC_Country_ID()+"..Region:"+m_location.getC_Region_ID()+
+//		"..Municipality:"+m_location.getC_Municipality_ID()+"..Parish:"+m_location.getC_Parish_ID());
+//log.warning(
+//		"Combos.."+"  lstRegion:"+lstRegion.getItemCount()+"  lstMunicipality:"+
+//		lstMunicipality.getItemCount()+"  lstParish:"+lstParish.getItemCount()+
+//		"  lstRegion.getSelectedItem():"+lstRegion.getSelectedItem()+
+//		"  lstParish.getSelectedItem():"+lstParish.getSelectedItem()+
+//		"  lstMunicipality.getSelectedItem():"+lstMunicipality.getSelectedItem());
+
 		//  Country/Region
 		MCountryExt country = (MCountryExt)lstCountry.getSelectedItem().getValue();
 		m_location.setCountry(country);
 		if (country.isHasRegion() ) {
-			if (!lstRegion.getSelectedItem().equals(null)) {
+			//if (!lstRegion.getSelectedItem().equals(null)) {
+			if (lstRegion.getSelectedItem() != null) {
 				MRegionExt r = (MRegionExt)lstRegion.getSelectedItem().getValue();
 				m_location.setRegion(r); 
 			} else {
@@ -1093,39 +1128,21 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		} else {
 			m_location.setC_Region_ID(0);
 		}
-//		if (lstAddressValidation.getSelectedIndex() != -1)
-//		{
-//			MAddressValidationExt validation = (MAddressValidationExt) lstAddressValidation.getSelectedItem().getValue();
-//			m_location.setC_AddressValidation_ID(validation.getC_AddressValidation_ID());
-//		}
 		// Municipality
-		//log.warning("...............City Selected:"+lstCountry.getSelectedItem().getValue());
-		//log.warning("...............Country Selected:"+lstCountry.getSelectedItem().getValue());
-		//log.warning("...............Region Selected:"+lstRegion.getSelectedItem().getValue());
-		//log.warning("...............Municipality Selected:"+lstMunicipality.getSelectedItem().getValue());
-		if (lstRegion.getSelectedItem()!=null  ) {  
-			//!lstMunicipality.getSelectedItem().getValue().equals(null) ) {
+		if (lstMunicipality.getSelectedItem() != null ) {
 			MMunicipality m=(MMunicipality)lstMunicipality.getSelectedItem().getValue();
 			m_location.setMunicipality(m);
 		} else {
 			m_location.setMunicipality(null);
 		}
 		// Parish
-		if (lstParish.getSelectedItem().getValue() !=null ) {
-			//!lstParish.getSelectedItem().getValue().equals(null) ) {
+		if ( lstParish.getSelectedItem() != null) {
 			MParish p=(MParish)lstParish.getSelectedItem().getValue();
 			m_location.setParish(p);
 		} else {
 			m_location.setParish(null);
 		}
-		//log.warning("................Values Selected................................");
-		//log.warning("City Selected:"+txtCity.getC_City_ID()+"-"+txtCity.getValue()+"  Country Selected:"+lstCountry.getSelectedItem().getValue()+"  Region Selected:"+lstRegion.getSelectedItem().getValue()+"  Municipality Selected:"+lstMunicipality.getSelectedItem().getValue()+"  Parish Selected:"+lstParish.getSelectedItem().getValue());
-		//log.warning("................Values Updated................................");
-		//log.warning("add1:"+m_location.getAddress1()+" add2:"+m_location.getAddress2()+"  add3:"+m_location.getAddress3()+"  add4:"+m_location.getAddress4()+" city:"+m_location.getCity()+"  cityid:"+m_location.getC_City_ID()+" Region:"+m_location.getC_Region_ID());
-		//log.warning("Mun:"+m_location.getC_Municipality_ID()+"  Parr:"+m_location.getC_Parish_ID());
-		//log.warning("................FullAdress................................");
-		//log.warning("getFullAdress:"+getFullAdress());
-		//  Save changes 
+		//Save changes 		
 		boolean success = false;
 		if (m_location.save())
 		{

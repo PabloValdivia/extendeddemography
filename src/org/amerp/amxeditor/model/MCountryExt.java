@@ -1,6 +1,15 @@
-/**
- * 
- */
+/******************************************************************************
+ * Copyright (C) 2015 Luis Amesty                                             *
+ * Copyright (C) 2015 AMERP Consulting                                        *
+ * This program is free software; you can redistribute it and/or modify it    *
+ * under the terms version 2 of the GNU General Public License as published   *
+ * by the Free Software Foundation. This program is distributed in the hope   *
+ * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied *
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.           *
+ * See the GNU General Public License for more details.                       *
+ * You should have received a copy of the GNU General Public License along    *
+ * with this program; if not, write to the Free Software Foundation, Inc.,    *
+ ******************************************************************************/
 package org.amerp.amxeditor.model;
 
 import static org.compiere.model.SystemIDs.COUNTRY_US;
@@ -11,9 +20,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
-import org.compiere.model.MClient;
-import org.compiere.model.MLanguage;
-import org.compiere.model.Query;
+import org.compiere.model.*;
 import org.amerp.amxeditor.model.MRegionExt;
 
 //import org.compiere.model.*;
@@ -89,7 +96,7 @@ public class MCountryExt extends X_C_Country implements Comparator<Object>, Seri
 
 	private static synchronized void loadAllCountriesIfNeeded(Properties ctx) {
 		if (s_countries == null || s_countries.isEmpty()) {
-			loadAllCountries(ctx);
+			loadAllCountries2(ctx);
 		}
 	}
 	
@@ -99,6 +106,30 @@ public class MCountryExt extends X_C_Country implements Comparator<Object>, Seri
 	 *	@param ctx context
 	 */
 	private static void loadAllCountries (Properties ctx)
+	{
+		MClient client = MClient.get (ctx);
+		MLanguage lang = MLanguage.get(ctx, client.getAD_Language());
+		//
+		s_countries = new CCache<Integer,MCountryExt>(Table_Name, 250);
+		List<MCountryExt> countries = new Query(ctx, Table_Name, "", null)
+			.setOnlyActiveRecords(true)
+			.list();
+		for (MCountryExt c : countries) {
+			s_countries.put(c.getC_Country_ID(), c);
+			//	Country code of Client Language
+			if (lang != null && lang.getCountryCode().equals(c.getCountryCode()))
+				s_default.put(client.getAD_Client_ID(), c);
+		}
+		if (s_log.isLoggable(Level.FINE)) s_log.fine("#" + s_countries.size() 
+			+ " - Default=" + s_default);
+	}	//	loadAllCountries
+
+	/**
+	 * 	Load Countries2
+	 * 	Set Default Language to Client Language
+	 *	@param ctx context
+	 */
+	private static void loadAllCountries2 (Properties ctx)
 	{
 		MClient client = MClient.get (ctx);
 		MLanguage lang = MLanguage.get(ctx, client.getAD_Language());
@@ -259,6 +290,8 @@ public class MCountryExt extends X_C_Country implements Comparator<Object>, Seri
 			String nn = getTrlName();
 			if (nn != null)
 				return nn;
+			else return getName();
+				
 		}
 		return getName();
 	}   //  toString
@@ -269,12 +302,26 @@ public class MCountryExt extends X_C_Country implements Comparator<Object>, Seri
 	 */
 	public String getTrlName()
 	{
-		if (m_trlName == null && getEnvLanguage() != null)
-		{
-			m_trlName = get_Translation(COLUMNNAME_Name, getEnvLanguage());
-			if (m_trlName == null)
-				m_trlName = getName();
-		}
+//		if (m_trlName == null && getEnvLanguage() != null)
+//		{
+//			m_trlName = get_Translation(COLUMNNAME_Name, getEnvLanguage());
+//			if (m_trlName == null)
+//				m_trlName = getName();
+//		}
+//		return m_trlName;
+//		log.warning("..........COLUMNNAME_Name"+COLUMNNAME_Name+"   getEnvLanguage()"+getEnvLanguage());
+
+//		if (m_trlName == null) {
+//			if ( getEnvLanguage() != null)
+//			{
+//				m_trlName = getName();
+//			} else {
+//				m_trlName = getName();
+//			}
+//		} else {
+//			m_trlName = getName();
+//		}
+		m_trlName = getName();
 		return m_trlName;
 	}	//	getTrlName
 	
