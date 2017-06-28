@@ -2,13 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Amxeditor
 Bundle-SymbolicName: org.amerp.amxeditor
-Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Version: 4.1.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/ModelFactory.xml,OSGI-INF/EditorFactory.xml,OSGI-INF/DisplayTypeFactory.xml,
  OSGI-INF/EventFactory.xml
-Require-Bundle: org.adempiere.base;bundle-version="2.1.0",
- org.adempiere.plugin.utils;bundle-version="2.1.0",
- org.adempiere.ui.zk;bundle-version="2.1.0",
- org.zkoss.zk.library;bundle-version="6.0.0"
+Require-Bundle: org.adempiere.base;bundle-version="4.1.0",
+ org.adempiere.plugin.utils;bundle-version="4.1.0",
+ org.adempiere.ui;bundle-version="4.1.0",
+ org.adempiere.ui.zk;bundle-version="4.1.0",
+ zk
 Import-Package: org.osgi.service.event
-Bundle-Activator: org.adempiere.plugin.utils.AdempiereActivator
+Bundle-Activator: org.adempiere.plugin.utils.Incremental2PackActivator
