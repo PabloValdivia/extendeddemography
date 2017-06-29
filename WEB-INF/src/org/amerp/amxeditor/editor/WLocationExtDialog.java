@@ -927,13 +927,38 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			}
 			
 			MLocationExt m_location = new MLocationExt(Env.getCtx(), 0, null);
-			m_location.setAddress1(txtAddress1.getValue());
-			m_location.setAddress2(txtAddress2.getValue());
-			m_location.setAddress3(txtAddress3.getValue());
-			m_location.setAddress4(txtAddress4.getValue());
+			try {
+				m_location.setAddress1(txtAddress1.getValue());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				m_location.setAddress2(txtAddress2.getValue());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				m_location.setAddress3(txtAddress3.getValue());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				m_location.setAddress4(txtAddress4.getValue());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			m_location.setC_City_ID(txtCity.getC_City_ID()); 
 			m_location.setCity(txtCity.getValue());
-			m_location.setPostal(txtPostal.getValue());
+			try {
+				m_location.setPostal(txtPostal.getValue());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			//  Country/Region
 			MCountryExt country = (MCountryExt) lstCountry.getSelectedItem().getValue();
 			m_location.setCountry(country);
@@ -1096,14 +1121,44 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 	{
 		Trx trx = Trx.get(Trx.createTrxName("WLocationExtDialog"), true);
 		m_location.set_TrxName(trx.getTrxName());
-		m_location.setAddress1(txtAddress1.getValue());
-		m_location.setAddress2(txtAddress2.getValue());
-		m_location.setAddress3(txtAddress3.getValue());
-		m_location.setAddress4(txtAddress4.getValue());
+		try {
+			m_location.setAddress1(txtAddress1.getValue());
+		} catch (WrongValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			m_location.setAddress2(txtAddress2.getValue());
+		} catch (WrongValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			m_location.setAddress3(txtAddress3.getValue());
+		} catch (WrongValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			m_location.setAddress4(txtAddress4.getValue());
+		} catch (WrongValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		m_location.setC_City_ID(txtCity.getC_City_ID()); 
 		m_location.setCity(txtCity.getValue());
-		m_location.setPostal(txtPostal.getValue());
-		m_location.setPostal_Add(txtPostalAdd.getValue());
+		try {
+			m_location.setPostal(txtPostal.getValue());
+		} catch (WrongValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			m_location.setPostal_Add(txtPostalAdd.getValue());
+		} catch (WrongValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//
 //log.warning("m_location.action_OK  Values..City:"+m_location.getC_City_ID()+"-"+m_location.getCity()+
 //		"..Country:"+m_location.getC_Country_ID()+"..Region:"+m_location.getC_Region_ID()+

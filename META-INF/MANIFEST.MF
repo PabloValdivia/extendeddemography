@@ -10,6 +10,6 @@ Require-Bundle: org.adempiere.base;bundle-version="4.1.0",
  org.adempiere.plugin.utils;bundle-version="4.1.0",
  org.adempiere.ui;bundle-version="4.1.0",
  org.adempiere.ui.zk;bundle-version="4.1.0",
- zk
+ org.zkoss.zk.library;bundle-version="7.0.7"
 Import-Package: org.osgi.service.event
 Bundle-Activator: org.adempiere.plugin.utils.Incremental2PackActivator
