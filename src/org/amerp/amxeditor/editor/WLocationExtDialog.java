@@ -30,6 +30,7 @@ import org.adempiere.webui.component.Row;
 import org.adempiere.webui.component.Rows;
 import org.adempiere.webui.component.Textbox;
 import org.adempiere.webui.component.Window;
+import org.adempiere.webui.util.ZKUpdateUtil;
 import org.adempiere.webui.window.*;
 //
 import org.amerp.amxeditor.model.*;
@@ -45,7 +46,8 @@ import org.zkoss.zul.Borderlayout;
 
 /**
  * @author luisamesty
- *
+ * @contributor Ing. Victor Suarez <victor.suarez.is@gmail.com>
+ * 		- Upgrade to iDempiere 4.1 
  */
 public class WLocationExtDialog extends Window implements EventListener<Event>
 {
@@ -368,12 +370,12 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		Row pnlMunicipality     = new Row();
 		pnlMunicipality.appendChild(lblMunicipality.rightAlign());
 		pnlMunicipality.appendChild(lstMunicipality);
-		lstMunicipality.setHflex("1");
+		ZKUpdateUtil.setHflex(lstMunicipality, "1");
 
 		Row pnlParish     = new Row();
 		pnlParish.appendChild(lblParish.rightAlign());
 		pnlParish.appendChild(lstParish);
-		lstParish.setHflex("1");
+		ZKUpdateUtil.setHflex(lstParish, "1");
 
 		Row pnlPostal   = new Row();
 		pnlPostal.appendChild(lblPostal.rightAlign());
@@ -388,12 +390,12 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 		Row pnlRegion    = new Row();
 		pnlRegion.appendChild(lblRegion.rightAlign());
 		pnlRegion.appendChild(lstRegion);
-		lstRegion.setHflex("1");
+		ZKUpdateUtil.setHflex(lstRegion, "1");
 
 		Row pnlCountry  = new Row();
 		pnlCountry.appendChild(lblCountry.rightAlign());
 		pnlCountry.appendChild(lstCountry);
-		lstCountry.setHflex("1");
+		ZKUpdateUtil.setHflex(lstCountry, "1");
 
 		Panel pnlLinks    = new Panel();
 		pnlLinks.appendChild(toLink);
@@ -447,7 +449,7 @@ public class WLocationExtDialog extends Window implements EventListener<Event>
 			Row row = new Row();
 			rows.appendChild(row);
 			row.appendCellChild(lstAddressValidation, 2);
-			lstAddressValidation.setHflex("1");			
+			ZKUpdateUtil.setHflex(lstAddressValidation, "1");			
 			
 			MAddressValidationExt[] validations = MAddressValidationExt.getAddressValidation(Env.getCtx(), Env.getAD_Client_ID(Env.getCtx()), null);
 			for (MAddressValidationExt validation : validations)

@@ -23,21 +23,18 @@ import org.adempiere.webui.editor.*;
 import org.adempiere.webui.event.*;
 import org.adempiere.webui.theme.ThemeManager;
 import org.adempiere.webui.window.WFieldRecordInfo;
-import org.adempiere.webui.window.WLocationDialog;
-import org.amerp.amxeditor.factory.DisplayTypeFactory;
 import org.amerp.amxeditor.model.MLocationExt;
 import org.amerp.amxeditor.model.MLocationLookupExt;
 import org.compiere.model.GridField;
 import org.compiere.model.GridTab;
-//import org.compiere.model.*;
 import org.compiere.util.*;
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.*;
 
 
 /**
  * @author luisamesty
- *
+ * @contributor Ing. Victor Suarez <victor.suarez.is@gmail.com>
+ * 		- Upgrade to iDempiere 4.1
  */
 public class WLocationExtEditor extends WEditor implements EventListener<Event>, PropertyChangeListener, ContextMenuListener
 {
