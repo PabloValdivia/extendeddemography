@@ -30,16 +30,13 @@ public class DisplayTypeFactory implements IDisplayTypeFactory{
 	
 	//public static int LocationExtended = ((X_AD_Reference)new Query(Env.getCtx(),X_AD_Reference.Table_Name,"Name='LocationExtended'",null).first()).getAD_Reference_ID();
 	//public static int LocationExtended = 1000066;
-	public static int LocationExtended = 0;
-	public X_AD_Reference reference = new Query(Env.getCtx(),X_AD_Reference.Table_Name,"Name='LocationExtended'", null).first();
+	public static int LocationExtended = new Query(Env.getCtx(),X_AD_Reference.Table_Name,"Name='LocationExtended'", null).firstId();
 	
 	/* (non-Javadoc)
 	 * @see org.adempiere.base.IDisplayTypeFactory#isID(int)
 	 */
     @Override
     public boolean isID(int p_displayType) {
-    	if(reference != null)
-    		LocationExtended = reference.get_ID();
     	if(p_displayType == LocationExtended) {
 //log.warning("..........DisplayTypeFactory...........");
 //log.warning("isID - LocationExtended "+LocationExtended);
@@ -71,8 +68,6 @@ public class DisplayTypeFactory implements IDisplayTypeFactory{
 	 */
     @Override
     public boolean isText(int p_displayType) {
-    	if(reference != null) 
-    		LocationExtended = reference.get_ID();
     	if(p_displayType == LocationExtended) {
 //log.warning("..........DisplayTypeFactory...........");
 //log.warning("isText - LocationExtended"+LocationExtended);
@@ -133,8 +128,6 @@ public class DisplayTypeFactory implements IDisplayTypeFactory{
 	 */
     @Override
     public Class<?> getClass(int p_displayType, boolean p_yesNoAsBoolean) {
-    	if(reference != null) 
-    		LocationExtended = reference.get_ID();
     	if(p_displayType == LocationExtended) {
 //log.warning(".....................");
 //log.warning("getClass - LocationExtended"+LocationExtended);
@@ -149,8 +142,6 @@ public class DisplayTypeFactory implements IDisplayTypeFactory{
 	 */
     @Override
     public String getSQLDataType(int p_displayType, String p_columnName, int p_fieldLength) {
-    	if(reference != null) 
-    		LocationExtended = reference.get_ID();
     	if(p_displayType == LocationExtended) {
 //log.warning(".....................");
 //log.warning("getSQLDataType - LocationExtended"+LocationExtended);
@@ -165,8 +156,6 @@ public class DisplayTypeFactory implements IDisplayTypeFactory{
 	 */
     @Override
     public String getDescription(int p_displayType) {
-    	if(reference != null) 
-    		LocationExtended = reference.get_ID();
     	if(p_displayType == LocationExtended) {
     		return "LocationExtended";   		
 
